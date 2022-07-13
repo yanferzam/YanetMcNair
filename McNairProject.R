@@ -22,6 +22,7 @@ library(usdata)
 census_api_key("8bf1a6a7e21b7fc1c29757c7cd31eb3684a47783", overwrite = TRUE, install = TRUE)
 readRenviron("~/.Renviron")
 
+#variables in census data from acs5 2020
 v2020 <- load_variables(2020, "acs5")
 View(v2020)
 
@@ -35,11 +36,10 @@ district_pop <- get_acs(geography = "congressional district",
                         output = "wide")
 
 #extra vectors created to identify state id and congressional district id
-#not really needed
 state.cd_id <- district_pop %>%
   mutate(state_name = str_extract(NAME,"[^,]+$"))%>%
   mutate(cd = str_remove(GEOID, "\\d\\d")) %>%
-  mutate(ST = str_remove(GEOID, "\\d\\d$"))
+  mutate(ST = str_remove(GEOID, "\\d\\d$")) #not really needed
 
 #this removes Alaska/Hawaii from census data
 state.cd_id2 <- state.cd_id %>%
