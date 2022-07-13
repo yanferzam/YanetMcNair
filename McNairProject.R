@@ -1,4 +1,5 @@
 
+
 #if package is not already installed, install it
 if (!require("dplyr")) install.packages("dplyr")  
 if (!require("stringr")) install.packages("stringr") 
@@ -36,10 +37,11 @@ district_pop <- get_acs(geography = "congressional district",
                         output = "wide")
 
 #extra vectors created to identify state id and congressional district id
+#ST vector is not needed
 state.cd_id <- district_pop %>%
   mutate(state_name = str_extract(NAME,"[^,]+$"))%>%
-  mutate(cd = str_remove(GEOID, "\\d\\d")) %>%
-  mutate(ST = str_remove(GEOID, "\\d\\d$")) #not really needed
+  mutate(cd = str_remove(GEOID, "\\d\\d")) %>% 
+  mutate(ST = str_remove(GEOID, "\\d\\d$"))#not really needed
 
 #this removes Alaska/Hawaii from census data
 state.cd_id2 <- state.cd_id %>%
@@ -72,4 +74,9 @@ ggplot(data = immigration_pop, mapping = aes()) +
                        high = ("purple"),
                        midpoint = 2e+05,
                        na.value = "grey50") +
-  theme(panel.background = element_blank())
+  theme(panel.background = element_blank(), plot.title = element_text(size = 10), legend.title = element_text(size = 5),plot.subtitle = element_text(size = 6),
+        legend.key.size = unit(.7, "cm"), legend.text = element_text(size = 5) 
+      ) +
+  labs(title = "Foreign born population in the U.S. per congressional district", subtitle = "American Community Survey 5-Year Data (2016-2020)",
+       fill = "population"  )
+
